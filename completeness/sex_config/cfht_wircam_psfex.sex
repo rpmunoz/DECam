@@ -1,0 +1,63 @@
+# Simple configuration file for SExtractor prior to PSFEx use
+# only non-default parameters are present.
+# EB 2007-08-01
+#
+ 
+#-------------------------------- Catalog ------------------------------------
+ 
+CATALOG_NAME     test.cat   # Catalog filename
+CATALOG_TYPE     FITS_LDAC      # FITS_LDAC format
+PARAMETERS_NAME  sex_config/cfht_wircam_psfex.param # name of the file containing catalog contents
+ 
+#------------------------------- Extraction ----------------------------------
+ 
+DETECT_TYPE      CCD            # CCD (linear) or PHOTO (with gamma correction)
+DETECT_MINAREA   3              # minimum number of pixels above threshold
+
+DETECT_THRESH    2              # a fairly conservative threshold
+ANALYSIS_THRESH  3              # idem
+ 
+FILTER           Y              # apply filter for detection ("Y" or "N")?
+FILTER_NAME      sex_config/gauss_2.0_5x5.conv   # name of the file containing the filter
+
+DEBLEND_NTHRESH  32             # Number of deblending sub-thresholds
+DEBLEND_MINCONT  0.005          # Minimum contrast parameter for deblending
+ 
+CLEAN            Y              # Clean spurious detections? (Y or N)?
+CLEAN_PARAM      1.0            # Cleaning efficiency
+
+#-------------------------------- WEIGHTing ----------------------------------
+WEIGHT_TYPE      NONE           # type of WEIGHTing: NONE, BACKGROUND,
+                                # MAP_RMS, MAP_VAR or MAP_WEIGHT
+WEIGHT_IMAGE     weight.fits    # weight-map filename
+#-------------------------------- FLAGging -----------------------------------
+FLAG_IMAGE       flag.fits      # filename for an input FLAG-image
+FLAG_TYPE        OR             # flag pixel combination: OR, AND, MIN, MAX
+                                # or MOST
+#------------------------------ Photometry -----------------------------------
+ 
+PHOT_APERTURES   12.            # <- put the referrence aperture diameter here
+SATUR_LEVEL      65535.0        # <- put the right saturation threshold here
+SATUR_KEY        NONE           # keyword for saturation level (in ADUs)
+GAIN             3.8            # <- put the detector gain in e-/ADU here
+GAIN_KEY         GAIN           # keyword for detector gain in e-/ADU
+PIXEL_SCALE      0.304          # size of pixel in arcsec (0=use FITS WCS info)
+
+#------------------------- Star/Galaxy Separation ---------------------------- 
+#------------------------------ Background -----------------------------------
+BACK_TYPE        AUTO           # AUTO or MANUAL
+BACK_VALUE       0.0            # Default background value in MANUAL mode
+#------------------------------ Check Image ----------------------------------
+#--------------------- Memory (change with caution!) -------------------------
+MEMORY_OBJSTACK  5000           # number of objects in stack
+MEMORY_PIXSTACK  5000000         # number of pixels in stack
+MEMORY_BUFSIZE   2048           # number of lines in buffer
+#------------------------------- ASSOCiation ---------------------------------
+#----------------------------- Miscellaneous ---------------------------------
+VERBOSE_TYPE     NORMAL         # can be QUIET, NORMAL or FULL
+HEADER_SUFFIX    .head          # Filename extension for additional headers
+WRITE_XML        Y              # Write XML file (Y/N)?
+XML_NAME         sex.xml        # Filename for XML output
+XSL_URL          /Users/rmunoz/local/share/sextractor/sextractor.xsl
+                                # Filename for XSL style-sheet
+
