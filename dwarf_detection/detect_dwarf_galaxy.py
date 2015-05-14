@@ -171,7 +171,7 @@ if __name__ == "__main__":
 	im_thresh=im_median + 2*im_stddev
 	print "Image median, stddev, threshold ", im_median, im_stddev, im_thresh
 
-	im_seg = detect_sources(shared_nim, im_thresh, npixels=5)
+	seg_data = detect_sources(shared_nim, im_thresh, npixels=5)
 
 	print "Writing file ", im_convol_file
 	
@@ -179,7 +179,31 @@ if __name__ == "__main__":
 	pyfits.writeto(im_convol_file, shared_nim, header=im_h)
 
 	if os.path.isfile(im_convol_seg_file): os.remove(im_convol_seg_file)
-	pyfits.writeto(im_convol_seg_file, im_seg, header=im_h)
+	pyfits.writeto(im_convol_seg_file, seg_data, header=im_h)
+
+# Here we plot the sources detected using the segmentation map
+	
+	seg_nid=np.max(seg_data)+1
+
+	cat_data=np.recarray(seg_nid, dtype={'names':['id','npix','flux','mag','fwhm'], 'formats':['i4','i4','f4','f4','f4']})
+	cat_data.fill(0)
+
+	print 'Computing the flux and size for the detected sources'
+	seg_npix=np.bincount(np.ravel(seg_data))
+	seg_flux=np.bincount(np.ravel(seg_data), weights=np.ravel(shared_im))
+	for i in range(seg_nid):
+		cat_data[i]=(i, seg_npix[i], seg_flux[i], 0., 0.)
+
+	cat_data=cat_data[1:]
+
+	fig = plt.figure()
+	ax = plt.gca()
+	ax.plot(np.sqrt(cat_data['npix']), cat_data['flux'], linestyle='', marker='o', markersize=5, c='blue', alpha=0.5, markeredgecolor='none')
+	ax.set_yscale('log')
+	ax.set_xlabel('Sqrt(Area) (pix)')
+	ax.set_ylabel('Flux (ADU)')
+
+	fig.savefig('Mag_size_plot_tile1_g.pdf', format='pdf')
 
 	sys.exit()
 	
