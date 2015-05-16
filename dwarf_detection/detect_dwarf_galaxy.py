@@ -12,7 +12,7 @@ import multiprocessing, Queue
 import ctypes
 from astropy.convolution import convolve, convolve_fft, Gaussian2DKernel
 from astropy.stats import sigma_clipped_stats
-from photutils import detect_sources
+from photutils import detect_sources, segment_properties, properties_table
 
 sigmatofwhm=2*np.sqrt(2*np.log(2))
 fwhmtosigma=1./sigmatofwhm
@@ -100,89 +100,91 @@ if __name__ == "__main__":
 	shared_im[:] = im_data
 	im_data=0
 
-	shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
-	shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
-	shared_nim = shared_nim.reshape(im_size[0], im_size[1])
+	if os.path.isfile(im_convol_seg_file) is False:
 
-	# First, we convolve the image in order to mask the large galaxies
-#	kernel_sigma= 1./pix_scale * fwhmtosigma
-#	kernel_size= np.full(2, round(6*kernel_sigma/2.)*2+1, dtype=np.int)
-#	kernel_small=np.asarray(Gaussian2DKernel(kernel_sigma, x_size=kernel_size[0], y_size=kernel_size[1]))
+		shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
+		shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
+		shared_nim = shared_nim.reshape(im_size[0], im_size[1])
 
-	print "Generating kernel to mask small objects"
-	print 'Kernel_size: ', kernel_small_size, ' - Kernel_sigma: ', kernel_small_sigma
-	kernel_data=np.asarray(Gaussian2DKernel(kernel_small_sigma, x_size=kernel_small_size[0], y_size=kernel_small_size[1], mode='integrate'))
-	kernel_size=kernel_data.shape
+		print "Generating kernel to mask small objects"
+		print 'Kernel_size: ', kernel_small_size, ' - Kernel_sigma: ', kernel_small_sigma
+		kernel_data=np.asarray(Gaussian2DKernel(kernel_small_sigma, x_size=kernel_small_size[0], y_size=kernel_small_size[1], mode='integrate'))
+		kernel_size=kernel_data.shape
 
-	shared_kernel_base = multiprocessing.Array(ctypes.c_float, kernel_size[0]*kernel_size[1])
-	shared_kernel = np.ctypeslib.as_array(shared_kernel_base.get_obj())
-	shared_kernel = shared_kernel.reshape(kernel_size[0], kernel_size[1])
-	shared_kernel[:] = kernel_data
+		shared_kernel_base = multiprocessing.Array(ctypes.c_float, kernel_size[0]*kernel_size[1])
+		shared_kernel = np.ctypeslib.as_array(shared_kernel_base.get_obj())
+		shared_kernel = shared_kernel.reshape(kernel_size[0], kernel_size[1])
+		shared_kernel[:] = kernel_data
 
-	work_queue = multiprocessing.Queue()
-	grid_n=np.asarray(grid_n)
-	grid_mesh=np.ceil(im_size*1./grid_n).astype(int)
-	grid_x=np.append( np.arange(0,im_size[0], grid_mesh[0]), im_size[0])
-	grid_y=np.append( np.arange(0,im_size[1], grid_mesh[1]), im_size[1])
-
-	for i in range(0,grid_x.size-1):
-		for j in range(0,grid_y.size-1):
-			if work_queue.full():
-				print "Oh no! Queue is full after only %d iterations" % j
-
-			x_range=[grid_x[i],grid_x[i+1]]
-			y_range=[grid_y[j],grid_y[j+1]]
-			work_queue.put( (x_range, y_range) )
-
-	# create a queue to pass to workers to store the results
-	result_queue = multiprocessing.Queue()
-	procs=[]
-
-	# spawn workers
-	for i in range(n_processes):
-		worker = Worker_convolve(work_queue, result_queue)
-		procs.append(worker)
-		worker.start()
-
-	# collect the results off the queue
-	for i in range(n_processes):
-		result_queue.get()
-
-	for p in procs:
-		p.join()
-
-	print "Computing median and standard deviation"
-
-	x_region=np.round( im_size[0]*1./3+[-500,500] )
-	y_region=np.round( im_size[1]*1./3+[-500,500] )
-	print 'NaN region1 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
-	mean1, median1, std1 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]], sigma=3.0)	
-
-	x_region=np.round( im_size[0]*2./3+[-500,500] )
-	y_region=np.round( im_size[1]*2./3+[-500,500] )
-	print 'NaN region2 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
-	mean2, median2, std2 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]] , sigma=3.0)	
+		work_queue = multiprocessing.Queue()
+		grid_n=np.asarray(grid_n)
+		grid_mesh=np.ceil(im_size*1./grid_n).astype(int)
+		grid_x=np.append( np.arange(0,im_size[0], grid_mesh[0]), im_size[0])
+		grid_y=np.append( np.arange(0,im_size[1], grid_mesh[1]), im_size[1])
 	
-	print "Statistics region 1 ", median1, std1
-	print "Statistics region 2 ", median2, std2
-
-	im_median=np.mean([median1,median2])
-	im_stddev=np.sqrt((std1**2+std2**2)/2)
-	im_thresh=im_median + 2*im_stddev
-	print "Image median, stddev, threshold ", im_median, im_stddev, im_thresh
-
-	seg_data = detect_sources(shared_nim, im_thresh, npixels=5)
-
-	print "Writing file ", im_convol_file
+		for i in range(0,grid_x.size-1):
+			for j in range(0,grid_y.size-1):
+				if work_queue.full():
+					print "Oh no! Queue is full after only %d iterations" % j
 	
-	if os.path.isfile(im_convol_file): os.remove(im_convol_file)
-	pyfits.writeto(im_convol_file, shared_nim, header=im_h)
+				x_range=[grid_x[i],grid_x[i+1]]
+				y_range=[grid_y[j],grid_y[j+1]]
+				work_queue.put( (x_range, y_range) )
+	
+		# create a queue to pass to workers to store the results
+		result_queue = multiprocessing.Queue()
+		procs=[]
+	
+		# spawn workers
+		for i in range(n_processes):
+			worker = Worker_convolve(work_queue, result_queue)
+			procs.append(worker)
+			worker.start()
+	
+		# collect the results off the queue
+		for i in range(n_processes):
+			result_queue.get()
+	
+		for p in procs:
+			p.join()
+	
+		print "Computing median and standard deviation"
+	
+		x_region=np.round( im_size[0]*1./3+[-500,500] )
+		y_region=np.round( im_size[1]*1./3+[-500,500] )
+		print 'NaN region1 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
+		mean1, median1, std1 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]], sigma=3.0)	
+	
+		x_region=np.round( im_size[0]*2./3+[-500,500] )
+		y_region=np.round( im_size[1]*2./3+[-500,500] )
+		print 'NaN region2 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
+		mean2, median2, std2 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]] , sigma=3.0)	
+		
+		print "Statistics region 1 ", median1, std1
+		print "Statistics region 2 ", median2, std2
+	
+		im_median=np.mean([median1,median2])
+		im_stddev=np.sqrt((std1**2+std2**2)/2)
+		im_thresh=im_median + 2*im_stddev
+		print "Image median, stddev, threshold ", im_median, im_stddev, im_thresh
+	
+		seg_data = detect_sources(shared_nim, im_thresh, npixels=5)
+	
+		print "Writing file ", im_convol_file
+		
+		if os.path.isfile(im_convol_file): os.remove(im_convol_file)
+		pyfits.writeto(im_convol_file, shared_nim, header=im_h)
+	
+		if os.path.isfile(im_convol_seg_file): os.remove(im_convol_seg_file)
+		pyfits.writeto(im_convol_seg_file, seg_data, header=im_h)
+	else:
+		hdulist = pyfits.open(im_convol_seg_file)
+		seg_data=hdulist[0].data
+		seg_h=hdulist[0].header
+		hdulist.close()
 
-	if os.path.isfile(im_convol_seg_file): os.remove(im_convol_seg_file)
-	pyfits.writeto(im_convol_seg_file, seg_data, header=im_h)
 
 # Here we plot the sources detected using the segmentation map
-	
 	seg_nid=np.max(seg_data)+1
 
 	cat_data=np.recarray(seg_nid, dtype={'names':['id','npix','flux','mag','fwhm'], 'formats':['i4','i4','f4','f4','f4']})
@@ -204,6 +206,10 @@ if __name__ == "__main__":
 	ax.set_ylabel('Flux (ADU)')
 
 	fig.savefig('Mag_size_plot_tile1_g.pdf', format='pdf')
+
+	source_props = segment_properties(shared_im, seg_data)
+	source_table = properties_table(source_props)
+	print source_table
 
 	sys.exit()
 	
