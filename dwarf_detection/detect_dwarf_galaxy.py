@@ -213,25 +213,25 @@ if __name__ == "__main__":
 	source_table = properties_table(source_props)
 	print source_table
 
-	sys.exit()
-	
-	hdulist = pyfits.open(check_fix_file)
-	check_data=hdulist[0].data
-	check_h=hdulist[0].header
-	hdulist.close()
-	
-	hdulist = pyfits.open(cat_fix_file)
-	cat_data=hdulist[2].data
-	hdulist.close()
-	print "Sextractor catalog field names", cat_data.columns.names
-	
-	
-	gv_cat=~( (cat_data['FLUX_RADIUS']>10.) & (cat_data['MAG_AUTO']>19.) )
-	gv_mask=np.in1d( check_data, cat_data['NUMBER'][gv_cat]).reshape( check_data.shape )
-	im_data[gv_mask]=np.nan
-	
-	print "Writing file ", im_convol_file
-	
-	if os.path.isfile(im_convol_file): os.remove(im_convol_file)
-	pyfits.writeto(im_convol_file, shared_nim, header=im_h)
+#	sys.exit()
+#	
+#	hdulist = pyfits.open(check_fix_file)
+#	check_data=hdulist[0].data
+#	check_h=hdulist[0].header
+#	hdulist.close()
+#	
+#	hdulist = pyfits.open(cat_fix_file)
+#	cat_data=hdulist[2].data
+#	hdulist.close()
+#	print "Sextractor catalog field names", cat_data.columns.names
+#	
+#	
+#	gv_cat=~( (cat_data['FLUX_RADIUS']>10.) & (cat_data['MAG_AUTO']>19.) )
+#	gv_mask=np.in1d( check_data, cat_data['NUMBER'][gv_cat]).reshape( check_data.shape )
+#	im_data[gv_mask]=np.nan
+#	
+#	print "Writing file ", im_convol_file
+#	
+#	if os.path.isfile(im_convol_file): os.remove(im_convol_file)
+#	pyfits.writeto(im_convol_file, shared_nim, header=im_h)
 
