@@ -10,9 +10,11 @@ import numpy as np
 import pyfits
 import multiprocessing, Queue
 import ctypes
+import matplotlib.pyplot as plt
 from astropy.convolution import convolve, convolve_fft, Gaussian2DKernel
 from astropy.stats import sigma_clipped_stats
 from photutils import detect_sources, segment_properties, properties_table
+
 
 sigmatofwhm=2*np.sqrt(2*np.log(2))
 fwhmtosigma=1./sigmatofwhm
