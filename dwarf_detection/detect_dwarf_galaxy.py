@@ -93,8 +93,10 @@ if __name__ == "__main__":
 	weight_h=hdulist[0].header
 	hdulist.close()
 
-	im_data[weight_data == 0.]=np.nan
+	bv_weight=(weight_data == 0.)
+	im_data[bv_weight]=np.nan
 	im_mask_nan = np.isnan(im_data)
+	weight_data=0
 
 	shared_im_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
 	shared_im = np.ctypeslib.as_array(shared_im_base.get_obj())
@@ -185,33 +187,43 @@ if __name__ == "__main__":
 		seg_h=hdulist[0].header
 		hdulist.close()
 
-
 # Here we plot the sources detected using the segmentation map
-	seg_nid=np.max(seg_data)+1
+#	seg_nid=np.max(seg_data)+1
 
-	cat_data=np.recarray(seg_nid, dtype={'names':['id','npix','flux','mag','fwhm'], 'formats':['i4','i4','f4','f4','f4']})
-	cat_data.fill(0)
+#	cat_data=np.recarray(seg_nid, dtype={'names':['id','npix','flux','mag','fwhm'], 'formats':['i4','i4','f4','f4','f4']})
+#	cat_data.fill(0)
 
-	print 'Computing the flux and size for the detected sources'
-	seg_npix=np.bincount(np.ravel(seg_data))
-	seg_flux=np.bincount(np.ravel(seg_data), weights=np.ravel(shared_im))
-	for i in range(seg_nid):
-		cat_data[i]=(i, seg_npix[i], seg_flux[i], 0., 0.)
+#	print 'Computing the flux and size for the detected sources'
+#	seg_npix=np.bincount(np.ravel(seg_data))
+#	seg_flux=np.bincount(np.ravel(seg_data), weights=np.ravel(shared_im))
+#	for i in range(seg_nid):
+#		cat_data[i]=(i, seg_npix[i], seg_flux[i], 0., 0.)
 
-	cat_data=cat_data[1:]
+#	cat_data=cat_data[1:]
+
+	cat_properties = segment_properties(shared_im, seg_data, background=0., mask=im_mask_nan)
+	cat_columns = ['id', 'xcentroid', 'ycentroid', 'segment_sum', 'area', 'semimajor_axis_sigma', 'semiminor_axis_sigma', 'elongation']
+	cat_data = properties_table(cat_properties, columns=cat_columns)
+	gv_finite=(np.isfinite(cat_data['xcentroid']) & np.isfinite(cat_data['ycentroid']))
+	cat_data=cat_data[gv_finite]
+	gv_sort=np.argsort(cat_data['area'])[::-1]
+	cat_data=cat_data[gv_sort]
 
 	fig = plt.figure()
 	ax = plt.gca()
-	ax.plot(np.sqrt(cat_data['npix']), cat_data['flux'], linestyle='', marker='o', markersize=5, c='blue', alpha=0.5, markeredgecolor='none')
+	ax.plot(np.sqrt(cat_data['area']), cat_data['segment_sum'], linestyle='', marker='o', markersize=5, c='blue', alpha=0.5, markeredgecolor='none')
 	ax.set_yscale('log')
 	ax.set_xlabel('Sqrt(Area) (pix)')
 	ax.set_ylabel('Flux (ADU)')
+	fig.savefig('plot_flux_area_tile1_g.pdf', format='pdf')
 
-	fig.savefig('Mag_size_plot_tile1_g.pdf', format='pdf')
+	fig = plt.figure()
+	ax = plt.gca()
+	ax.plot(np.sqrt(cat_data['area']), cat_data['elongation'], linestyle='', marker='o', markersize=5, c='blue', alpha=0.5, markeredgecolor='none')
+	ax.set_xlabel('Sqrt(Area) (pix)')
+	ax.set_ylabel('Elongation')
+	fig.savefig('plot_elongation_area_tile1_g.pdf', format='pdf')
 
-	source_props = segment_properties(shared_im, seg_data)
-	source_table = properties_table(source_props)
-	print source_table
 
 #	sys.exit()
 #	
