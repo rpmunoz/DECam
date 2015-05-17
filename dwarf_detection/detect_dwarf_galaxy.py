@@ -46,7 +46,8 @@ class Worker_sky(multiprocessing.Process):
 				break
 
 			# the actual processing
-			print "Computing the sky - XRANGE=", y_range, " - YRANGE=", x_range
+			print 'Worker running: ', multiprocessing.current_process()
+#			print "Computing the sky - XRANGE=", y_range, " - YRANGE=", x_range
 
 			im_size=np.asarray(shared_im.shape)
 			kernel_size=np.asarray(shared_kernel.shape)
@@ -57,7 +58,7 @@ class Worker_sky(multiprocessing.Process):
 
 			shared_nim[x_range[0]:x_range[1], y_range[0]:y_range[1]]=convolve(shared_im[x_range[0]+x_pad[0]:x_range[1]+x_pad[1], y_range[0]+y_pad[0]:y_range[1]+y_pad[1]], shared_kernel, normalize_kernel=True)[-x_pad[0]:x_range[1]-x_range[0]-x_pad[0], -y_pad[0]:y_range[1]-y_range[0]-y_pad[0]]
 
-			print 'Worker sky is done', id
+			print 'Worker done: ', multiprocessing.current_process()
 			self.result_queue.put(id)
 
 
@@ -83,8 +84,8 @@ class Worker_convolve(multiprocessing.Process):
 				break
 
 			# the actual processing
-#			print 'Worker convolve started ', id
-			print "Convolving image section - XRANGE=", y_range, " - YRANGE=", x_range
+			print 'Worker running: ', multiprocessing.current_process()
+#			print "Convolving image section - XRANGE=", y_range, " - YRANGE=", x_range
 
 			im_size=np.asarray(shared_im.shape)
 			kernel_size=np.asarray(shared_kernel.shape)
@@ -96,7 +97,7 @@ class Worker_convolve(multiprocessing.Process):
 
 			shared_nim[x_range[0]:x_range[1], y_range[0]:y_range[1]]=convolve(shared_im[x_range[0]+x_pad[0]:x_range[1]+x_pad[1], y_range[0]+y_pad[0]:y_range[1]+y_pad[1]], shared_kernel, normalize_kernel=True)[-x_pad[0]:x_range[1]-x_range[0]-x_pad[0], -y_pad[0]:y_range[1]-y_range[0]-y_pad[0]]
 
-			print 'Worker convolve is done', id
+			print 'Worker done: ', multiprocessing.current_process()
 			self.result_queue.put(id)
 
 
@@ -125,9 +126,9 @@ if __name__ == "__main__":
 	kernel_large_size= np.full(2, round(4*kernel_large_sigma/2.)*2+1, dtype=np.int)
 
 	mask_area_min=1e5
-	back_method=['median','none']
-	back_size=(128,128)
-	back_filtersize=(3,3)
+	back_method=['none','median']
+	back_size=(512,512)
+	back_filtersize=(1,1)
 
 	grid_n=[6,6]
 	n_cpu=2
@@ -156,6 +157,10 @@ if __name__ == "__main__":
 	shared_im = shared_im.reshape(im_size[0], im_size[1])
 	shared_im[:] = im_data
 
+	shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
+	shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
+	shared_nim = shared_nim.reshape(im_size[0], im_size[1])
+
 	for method in back_method:
 
 		if method=='none':
@@ -180,10 +185,6 @@ if __name__ == "__main__":
 			shared_im[:] = skysub_data
 
 		if os.path.isfile(im_convol_seg_file) is False or do_overwrite is True:
-	
-			shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
-			shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
-			shared_nim = shared_nim.reshape(im_size[0], im_size[1])
 	
 			print "Generating kernel to mask small objects"
 			print 'Kernel_size: ', kernel_small_size, ' - Kernel_sigma: ', kernel_small_sigma
@@ -252,9 +253,9 @@ if __name__ == "__main__":
 		
 			seg_data = detect_sources(shared_nim, im_thresh, npixels=5)
 		
-			print "Writing file ", im_convol_file
 
 			if method=='none':			
+				print "Writing file ", im_convol_file
 				if os.path.isfile(im_convol_file): os.remove(im_convol_file)
 				pyfits.writeto(im_convol_file, shared_nim, header=im_h)
 		
@@ -262,6 +263,7 @@ if __name__ == "__main__":
 				pyfits.writeto(im_convol_seg_file, seg_data, header=im_h)
 
 			else:
+				print "Writing file ", im_skysub_convol_file
 				if os.path.isfile(im_skysub_convol_file): os.remove(im_skysub_convol_file)
 				pyfits.writeto(im_skysub_convol_file, shared_nim, header=im_h)
 		
