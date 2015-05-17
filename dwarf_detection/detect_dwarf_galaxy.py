@@ -24,11 +24,41 @@ setup_text_plots(fontsize=8, usetex=True)
 sigmatofwhm=2*np.sqrt(2*np.log(2))
 fwhmtosigma=1./sigmatofwhm
 
-def Sky_subtract(grid_mesh):
+class Worker_sky(multiprocessing.Process):
 
-	im_size=np.asarray(shared_im.shape)
-	grid_n=np.ceil(im_size*1./grid_mesh)
-	grid_xy=np.round(np.mgrid[0:im_size[0]:grid_n[0]*1j,0:im_size[1]:grid_n[1]*1j])
+	def __init__(self, work_queue, result_queue):
+
+		# base class initialization
+		multiprocessing.Process.__init__(self)
+
+		# job management stuff
+		self.work_queue = work_queue
+		self.result_queue = result_queue
+		self.kill_received = False
+
+	def run(self):
+		while not self.kill_received:
+
+			# get a task
+			try:
+				x_range, y_range = self.work_queue.get_nowait()
+			except Queue.Empty:
+				break
+
+			# the actual processing
+			print "Computing the sky - XRANGE=", y_range, " - YRANGE=", x_range
+
+			im_size=np.asarray(shared_im.shape)
+			kernel_size=np.asarray(shared_kernel.shape)
+
+			im_pad=(kernel_size-1)/2+10
+			x_pad=[0 if x_range[0]==0 else -im_pad[0], 0 if x_range[1]==(im_size[0]-1) else im_pad[0]]
+			y_pad=[0 if y_range[0]==0 else -im_pad[1], 0 if y_range[1]==(im_size[1]-1) else im_pad[1]]
+
+			shared_nim[x_range[0]:x_range[1], y_range[0]:y_range[1]]=convolve(shared_im[x_range[0]+x_pad[0]:x_range[1]+x_pad[1], y_range[0]+y_pad[0]:y_range[1]+y_pad[1]], shared_kernel, normalize_kernel=True)[-x_pad[0]:x_range[1]-x_range[0]-x_pad[0], -y_pad[0]:y_range[1]-y_range[0]-y_pad[0]]
+
+			print 'Worker sky is done', id
+			self.result_queue.put(id)
 
 
 class Worker_convolve(multiprocessing.Process):
@@ -79,10 +109,12 @@ if __name__ == "__main__":
 	cat_fix_file='/Volumes/Q6/NGFS/DECam/stacks/check/ss_fornax_FIX.003.ldac'
 	
 	im_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi.003.fits'
-	im_sky_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKY.003.fits'
-	im_skysub_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKYSUB.003.fits'
 	im_convol_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_CONVOL.003.fits'
 	im_convol_seg_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_CONVOL_SEG.003.fits'
+	im_sky_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKY.003.fits'
+	im_skysub_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKYSUB.003.fits'
+	im_skysub_convol_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKYSUB_CONVOL.003.fits'
+	im_skysub_convol_seg_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKYSUB_CONVOL_SEG.003.fits'
 
 	pix_scale=0.2637	# arcsec/pixel
 	kernel_sigma=20.
@@ -91,7 +123,11 @@ if __name__ == "__main__":
 	kernel_small_size= np.full(2, round(4*kernel_small_sigma/2.)*2+1, dtype=np.int)
 	kernel_large_sigma= 40./pix_scale * fwhmtosigma
 	kernel_large_size= np.full(2, round(4*kernel_large_sigma/2.)*2+1, dtype=np.int)
+
 	mask_area_min=1e5
+	back_method=['median','none']
+	back_size=(128,128)
+	back_filtersize=(3,3)
 
 	grid_n=[6,6]
 	n_cpu=2
@@ -119,110 +155,125 @@ if __name__ == "__main__":
 	shared_im = np.ctypeslib.as_array(shared_im_base.get_obj())
 	shared_im = shared_im.reshape(im_size[0], im_size[1])
 	shared_im[:] = im_data
-	im_data=0
 
-	print 'Estimating the background'
-	tic=time.time()
-	sky_data=Background(shared_im, (256,256), filter_shape=(2,2), method='median', mask=im_mask_nan)
-	skysub_data=shared_im-sky_data
-	skysub_data[im_mask_nan]=0.
-	print "Sky modeling took %f seconds." % (time.time() - tic)
+	for method in back_method:
 
-	print 'Writing sky file'
-	if os.path.isfile(im_sky_file): os.remove(im_sky_file)
-	pyfits.writeto(im_sky_file, sky_data, header=im_h)
+		if method=='none':
+			print 'Using the original image to create the segmentation map'
+			shared_im[:] = im_data
+		else:
+			print 'Modeling the background, removing it and then creating the segmentation map'
+			tic=time.time()
+			sky_data=Background(shared_im, back_size, filter_shape=back_filtersize, method=method, mask=im_mask_nan).background
+			skysub_data=shared_im-sky_data
+			skysub_data[im_mask_nan]=0.
+			print "Sky modeling took %f seconds." % (time.time() - tic)
 
-	print 'Writing sky subtracted file'
-	if os.path.isfile(im_skysub_file): os.remove(im_skysub_file)
-	pyfits.writeto(im_skysub_file, skysub_data, header=im_h)
+			print 'Writing sky file'
+			if os.path.isfile(im_sky_file): os.remove(im_sky_file)
+			pyfits.writeto(im_sky_file, sky_data, header=im_h)
 
-	shared_im[:] = skysub_data
+			print 'Writing sky subtracted file'
+			if os.path.isfile(im_skysub_file): os.remove(im_skysub_file)
+			pyfits.writeto(im_skysub_file, skysub_data, header=im_h)
 
-	if os.path.isfile(im_convol_seg_file) is False or do_overwrite is True:
+			shared_im[:] = skysub_data
 
-		shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
-		shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
-		shared_nim = shared_nim.reshape(im_size[0], im_size[1])
-
-		print "Generating kernel to mask small objects"
-		print 'Kernel_size: ', kernel_small_size, ' - Kernel_sigma: ', kernel_small_sigma
-		tic=time.time()
-		kernel_data=np.asarray(Gaussian2DKernel(kernel_small_sigma, x_size=kernel_small_size[0], y_size=kernel_small_size[1], mode='integrate'))
-		kernel_size=kernel_data.shape
-
-		shared_kernel_base = multiprocessing.Array(ctypes.c_float, kernel_size[0]*kernel_size[1])
-		shared_kernel = np.ctypeslib.as_array(shared_kernel_base.get_obj())
-		shared_kernel = shared_kernel.reshape(kernel_size[0], kernel_size[1])
-		shared_kernel[:] = kernel_data
-
-		work_queue = multiprocessing.Queue()
-		grid_n=np.asarray(grid_n)
-		grid_mesh=np.ceil(im_size*1./grid_n).astype(int)
-		grid_x=np.append( np.arange(0,im_size[0], grid_mesh[0]), im_size[0])
-		grid_y=np.append( np.arange(0,im_size[1], grid_mesh[1]), im_size[1])
+		if os.path.isfile(im_convol_seg_file) is False or do_overwrite is True:
 	
-		for i in range(0,grid_x.size-1):
-			for j in range(0,grid_y.size-1):
-				if work_queue.full():
-					print "Oh no! Queue is full after only %d iterations" % j
+			shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
+			shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
+			shared_nim = shared_nim.reshape(im_size[0], im_size[1])
 	
-				x_range=[grid_x[i],grid_x[i+1]]
-				y_range=[grid_y[j],grid_y[j+1]]
-				work_queue.put( (x_range, y_range) )
+			print "Generating kernel to mask small objects"
+			print 'Kernel_size: ', kernel_small_size, ' - Kernel_sigma: ', kernel_small_sigma
+			tic=time.time()
+			kernel_data=np.asarray(Gaussian2DKernel(kernel_small_sigma, x_size=kernel_small_size[0], y_size=kernel_small_size[1], mode='integrate'))
+			kernel_size=kernel_data.shape
 	
-		# create a queue to pass to workers to store the results
-		result_queue = multiprocessing.Queue()
-		procs=[]
+			shared_kernel_base = multiprocessing.Array(ctypes.c_float, kernel_size[0]*kernel_size[1])
+			shared_kernel = np.ctypeslib.as_array(shared_kernel_base.get_obj())
+			shared_kernel = shared_kernel.reshape(kernel_size[0], kernel_size[1])
+			shared_kernel[:] = kernel_data
 	
-		# spawn workers
-		for i in range(n_processes):
-			worker = Worker_convolve(work_queue, result_queue)
-			procs.append(worker)
-			worker.start()
-	
-		# collect the results off the queue
-		for i in range(n_processes):
-			result_queue.get()
-	
-		for p in procs:
-			p.join()
-	
-		print "Convolution with small kernel took %f seconds." % (time.time() - tic)
-
-		print "Computing median and standard deviation"
-	
-		x_region=np.round( im_size[0]*1./3+[-500,500] )
-		y_region=np.round( im_size[1]*1./3+[-500,500] )
-		print 'NaN region1 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
-		mean1, median1, std1 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]], sigma=3.0)	
-	
-		x_region=np.round( im_size[0]*2./3+[-500,500] )
-		y_region=np.round( im_size[1]*2./3+[-500,500] )
-		print 'NaN region2 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
-		mean2, median2, std2 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]] , sigma=3.0)	
+			work_queue = multiprocessing.Queue()
+			grid_n=np.asarray(grid_n)
+			grid_mesh=np.ceil(im_size*1./grid_n).astype(int)
+			grid_x=np.append( np.arange(0,im_size[0], grid_mesh[0]), im_size[0])
+			grid_y=np.append( np.arange(0,im_size[1], grid_mesh[1]), im_size[1])
 		
-		print "Statistics region 1 ", median1, std1
-		print "Statistics region 2 ", median2, std2
-	
-		im_median=np.mean([median1,median2])
-		im_stddev=np.sqrt((std1**2+std2**2)/2)
-		im_thresh=im_median + 2*im_stddev
-		print "Image median, stddev, threshold ", im_median, im_stddev, im_thresh
-	
-		seg_data = detect_sources(shared_nim, im_thresh, npixels=5)
-	
-		print "Writing file ", im_convol_file
+			for i in range(0,grid_x.size-1):
+				for j in range(0,grid_y.size-1):
+					if work_queue.full():
+						print "Oh no! Queue is full after only %d iterations" % j
 		
-		if os.path.isfile(im_convol_file): os.remove(im_convol_file)
-		pyfits.writeto(im_convol_file, shared_nim, header=im_h)
+					x_range=[grid_x[i],grid_x[i+1]]
+					y_range=[grid_y[j],grid_y[j+1]]
+					work_queue.put( (x_range, y_range) )
+		
+			# create a queue to pass to workers to store the results
+			result_queue = multiprocessing.Queue()
+			procs=[]
+		
+			# spawn workers
+			for i in range(n_processes):
+				worker = Worker_convolve(work_queue, result_queue)
+				procs.append(worker)
+				worker.start()
+		
+			# collect the results off the queue
+			for i in range(n_processes):
+				result_queue.get()
+		
+			for p in procs:
+				p.join()
+		
+			print "Convolution with small kernel took %f seconds." % (time.time() - tic)
 	
-		if os.path.isfile(im_convol_seg_file): os.remove(im_convol_seg_file)
-		pyfits.writeto(im_convol_seg_file, seg_data, header=im_h)
-	else:
-		hdulist = pyfits.open(im_convol_seg_file)
-		seg_data=hdulist[0].data
-		seg_h=hdulist[0].header
-		hdulist.close()
+			print "Computing median and standard deviation"
+		
+			x_region=np.round( im_size[0]*1./3+[-500,500] )
+			y_region=np.round( im_size[1]*1./3+[-500,500] )
+			print 'NaN region1 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
+			mean1, median1, std1 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]], sigma=3.0)	
+		
+			x_region=np.round( im_size[0]*2./3+[-500,500] )
+			y_region=np.round( im_size[1]*2./3+[-500,500] )
+			print 'NaN region2 ', np.where( np.isnan(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]]) )
+			mean2, median2, std2 = sigma_clipped_stats(shared_im[x_region[0]:x_region[1], y_region[0]:y_region[1]], mask=im_mask_nan[x_region[0]:x_region[1], y_region[0]:y_region[1]] , sigma=3.0)	
+			
+			print "Statistics region 1 ", median1, std1
+			print "Statistics region 2 ", median2, std2
+		
+			im_median=np.mean([median1,median2])
+			im_stddev=np.sqrt((std1**2+std2**2)/2)
+			im_thresh=im_median + 2*im_stddev
+			print "Image median, stddev, threshold ", im_median, im_stddev, im_thresh
+		
+			seg_data = detect_sources(shared_nim, im_thresh, npixels=5)
+		
+			print "Writing file ", im_convol_file
+
+			if method=='none':			
+				if os.path.isfile(im_convol_file): os.remove(im_convol_file)
+				pyfits.writeto(im_convol_file, shared_nim, header=im_h)
+		
+				if os.path.isfile(im_convol_seg_file): os.remove(im_convol_seg_file)
+				pyfits.writeto(im_convol_seg_file, seg_data, header=im_h)
+
+			else:
+				if os.path.isfile(im_skysub_convol_file): os.remove(im_skysub_convol_file)
+				pyfits.writeto(im_skysub_convol_file, shared_nim, header=im_h)
+		
+				if os.path.isfile(im_skysub_convol_seg_file): os.remove(im_skysub_convol_seg_file)
+				pyfits.writeto(im_skysub_convol_seg_file, seg_data, header=im_h)
+
+
+#	else:
+#		hdulist = pyfits.open(im_convol_seg_file)
+#		seg_data=hdulist[0].data
+#		seg_h=hdulist[0].header
+#		hdulist.close()
 
 # Here we plot the sources detected using the segmentation map
 #	seg_nid=np.max(seg_data)+1
