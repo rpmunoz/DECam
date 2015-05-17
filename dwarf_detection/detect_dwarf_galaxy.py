@@ -14,10 +14,21 @@ import matplotlib.pyplot as plt
 from astropy.convolution import convolve, convolve_fft, Gaussian2DKernel
 from astropy.stats import sigma_clipped_stats
 from photutils import detect_sources, segment_properties, properties_table
+from photutils.background import Background
+
+from astroML.plotting import setup_text_plots
+setup_text_plots(fontsize=8, usetex=True)
 
 
 sigmatofwhm=2*np.sqrt(2*np.log(2))
 fwhmtosigma=1./sigmatofwhm
+
+def Sky_subtract(grid_mesh):
+
+	im_size=np.asarray(shared_im.shape)
+	grid_n=np.ceil(im_size*1./grid_mesh)
+	grid_xy=np.round(np.mgrid[0:im_size[0]:grid_n[0]*1j,0:im_size[1]:grid_n[1]*1j])
+
 
 class Worker_convolve(multiprocessing.Process):
 
@@ -60,12 +71,15 @@ class Worker_convolve(multiprocessing.Process):
 
 if __name__ == "__main__":
 
+	do_overwrite=True
 	im_fix_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_FIX.003.fits'
 	weight_fix_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_FIX.003.WEIGHT.fits'
 	check_fix_file='/Volumes/Q6/NGFS/DECam/stacks/check/ss_fornax_FIX.003.CHECK_SEGMENTATION.fits'
 	cat_fix_file='/Volumes/Q6/NGFS/DECam/stacks/check/ss_fornax_FIX.003.ldac'
 	
 	im_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi.003.fits'
+	im_sky_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKY.003.fits'
+	im_skysub_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_SKYSUB.003.fits'
 	im_convol_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_CONVOL.003.fits'
 	im_convol_seg_file='/Volumes/Q6/NGFS/DECam/stacks/ss_fornax_tile1_g_long_ALIGNi_CONVOL_SEG.003.fits'
 
@@ -76,6 +90,8 @@ if __name__ == "__main__":
 	kernel_small_size= np.full(2, round(4*kernel_small_sigma/2.)*2+1, dtype=np.int)
 	kernel_large_sigma= 40./pix_scale * fwhmtosigma
 	kernel_large_size= np.full(2, round(4*kernel_large_sigma/2.)*2+1, dtype=np.int)
+	mask_area_min=1e5
+
 	grid_n=[6,6]
 	n_cpu=2
 	n_core=4
@@ -104,7 +120,21 @@ if __name__ == "__main__":
 	shared_im[:] = im_data
 	im_data=0
 
-	if os.path.isfile(im_convol_seg_file) is False:
+	sky_data=Background(shared_im, (128,128), filter_shape=(3,3), method='median', mask=im_mask_nan)
+	skysub_data=im_data-sky_data
+	skysub_data[im_mask_nan]=0.
+
+	print 'Writing sky file'
+	if os.path.isfile(im_sky_file): os.remove(im_sky_file)
+	pyfits.writeto(im_sky_file, sky_data, header=im_h)
+
+	print 'Writing sky subtracted file'
+	if os.path.isfile(im_skysub_file): os.remove(im_skysub_file)
+	pyfits.writeto(im_skysub_file, skysub_data, header=im_h)
+
+	shared_im[:] = skysub_data
+
+	if os.path.isfile(im_convol_seg_file) is False or do_overwrite is True:
 
 		shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
 		shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
@@ -200,6 +230,7 @@ if __name__ == "__main__":
 #		cat_data[i]=(i, seg_npix[i], seg_flux[i], 0., 0.)
 
 #	cat_data=cat_data[1:]
+	sys.exit()
 
 	cat_properties = segment_properties(shared_im, seg_data, background=0., mask=im_mask_nan)
 	cat_columns = ['id', 'xcentroid', 'ycentroid', 'segment_sum', 'area', 'semimajor_axis_sigma', 'semiminor_axis_sigma', 'elongation']
@@ -209,9 +240,12 @@ if __name__ == "__main__":
 	gv_sort=np.argsort(cat_data['area'])[::-1]
 	cat_data=cat_data[gv_sort]
 
+	gv_mask=(cat_data['area'] > mask_area_min)
+
 	fig = plt.figure()
 	ax = plt.gca()
 	ax.plot(np.sqrt(cat_data['area']), cat_data['segment_sum'], linestyle='', marker='o', markersize=5, c='blue', alpha=0.5, markeredgecolor='none')
+	ax.plot(np.sqrt(cat_data['area'][gv_mask]), cat_data['segment_sum'][gv_mask], linestyle='', marker='o', markersize=5, c='red', alpha=0.5, markeredgecolor='none')
 	ax.set_yscale('log')
 	ax.set_xlabel('Sqrt(Area) (pix)')
 	ax.set_ylabel('Flux (ADU)')
@@ -219,7 +253,18 @@ if __name__ == "__main__":
 
 	fig = plt.figure()
 	ax = plt.gca()
+	ax.plot( cat_data['area'], cat_data['segment_sum']/cat_data['area'], linestyle='', marker='o', markersize=5, c='blue', alpha=0.5, markeredgecolor='none')
+	ax.plot( cat_data['area'][gv_mask], cat_data['segment_sum'][gv_mask]/cat_data['area'][gv_mask], linestyle='', marker='o', markersize=5, c='red', alpha=0.5, markeredgecolor='none')
+	ax.set_xscale('log')
+	ax.set_yscale('log')
+	ax.set_xlabel('Area $(pix^2)$')
+	ax.set_ylabel('Flux$ $(ADU)$')
+	fig.savefig('plot_brightness_area_tile1_g.pdf', format='pdf')
+
+	fig = plt.figure()
+	ax = plt.gca()
 	ax.plot(np.sqrt(cat_data['area']), cat_data['elongation'], linestyle='', marker='o', markersize=5, c='blue', alpha=0.5, markeredgecolor='none')
+	ax.plot(np.sqrt(cat_data['area'][gv_mask]), cat_data['elongation'][gv_mask], linestyle='', marker='o', markersize=5, c='red', alpha=0.5, markeredgecolor='none')
 	ax.set_xlabel('Sqrt(Area) (pix)')
 	ax.set_ylabel('Elongation')
 	fig.savefig('plot_elongation_area_tile1_g.pdf', format='pdf')
