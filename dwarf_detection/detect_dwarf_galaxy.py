@@ -5,6 +5,7 @@ warnings.filterwarnings("ignore")
 
 import sys,os
 import os.path
+import time
 import subprocess
 import numpy as np
 import pyfits
@@ -120,9 +121,12 @@ if __name__ == "__main__":
 	shared_im[:] = im_data
 	im_data=0
 
-	sky_data=Background(shared_im, (128,128), filter_shape=(3,3), method='median', mask=im_mask_nan)
-	skysub_data=im_data-sky_data
+	print 'Estimating the background'
+	tic=time.time()
+	sky_data=Background(shared_im, (256,256), filter_shape=(2,2), method='median', mask=im_mask_nan)
+	skysub_data=shared_im-sky_data
 	skysub_data[im_mask_nan]=0.
+	print "Sky modeling took %f seconds." % (time.time() - tic)
 
 	print 'Writing sky file'
 	if os.path.isfile(im_sky_file): os.remove(im_sky_file)
@@ -142,6 +146,7 @@ if __name__ == "__main__":
 
 		print "Generating kernel to mask small objects"
 		print 'Kernel_size: ', kernel_small_size, ' - Kernel_sigma: ', kernel_small_sigma
+		tic=time.time()
 		kernel_data=np.asarray(Gaussian2DKernel(kernel_small_sigma, x_size=kernel_small_size[0], y_size=kernel_small_size[1], mode='integrate'))
 		kernel_size=kernel_data.shape
 
@@ -182,6 +187,8 @@ if __name__ == "__main__":
 		for p in procs:
 			p.join()
 	
+		print "Convolution with small kernel took %f seconds." % (time.time() - tic)
+
 		print "Computing median and standard deviation"
 	
 		x_region=np.round( im_size[0]*1./3+[-500,500] )
