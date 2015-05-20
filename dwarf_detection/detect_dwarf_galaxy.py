@@ -41,7 +41,7 @@ class Worker_sky(multiprocessing.Process):
 
 			# get a task
 			try:
-				x_range, y_range = self.work_queue.get_nowait()
+				x_range, y_range, back_size = self.work_queue.get_nowait()
 			except Queue.Empty:
 				break
 
@@ -50,11 +50,29 @@ class Worker_sky(multiprocessing.Process):
 #			print "Computing the sky - XRANGE=", y_range, " - YRANGE=", x_range
 
 			im_size=np.asarray(shared_im.shape)
-			kernel_size=np.asarray(shared_kernel.shape)
 
-			im_pad=(kernel_size-1)/2+10
+			im_pad=back_size
 			x_pad=[0 if x_range[0]==0 else -im_pad[0], 0 if x_range[1]==(im_size[0]-1) else im_pad[0]]
 			y_pad=[0 if y_range[0]==0 else -im_pad[1], 0 if y_range[1]==(im_size[1]-1) else im_pad[1]]
+
+			im_data=shared_im[x_range[0]+x_pad[0]:x_range[1]+x_pad[1], y_range[0]+y_pad[0]:y_range[1]+y_pad[1]]
+			yextra = im_data.shape[0] % back_size[0]
+			xextra = im_data.shape[1] % back_size[1]
+			
+			ypad, xpad = 0, 0
+			if yextra > 0: ypad = back_size[0] - yextra
+			if xextra > 0: xpad = back_size[1] - xextra
+			pad_width = ((0, ypad), (0, xpad))
+			im_data_pad = np.pad(im_data, pad_width, mode='constant', constant_values=[np.nan])
+
+			ny, nx = im_data_pad.shape
+			ny_box, nx_box = back_size
+			y_nbins = int(ny / ny_box)   # always integer because data were padded
+			x_nbins = int(nx / nx_box)   # always integer because data were padded
+			im_data_rebin = np.swapaxes(im_data_pad.reshape(y_nbins, ny_box, x_nbins, nx_box), 1, 2).reshape(y_nbins, x_nbins, ny_box * nx_box)
+
+
+			ny, nx = im_data.shape
 
 			shared_nim[x_range[0]:x_range[1], y_range[0]:y_range[1]]=convolve(shared_im[x_range[0]+x_pad[0]:x_range[1]+x_pad[1], y_range[0]+y_pad[0]:y_range[1]+y_pad[1]], shared_kernel, normalize_kernel=True)[-x_pad[0]:x_range[1]-x_range[0]-x_pad[0], -y_pad[0]:y_range[1]-y_range[0]-y_pad[0]]
 
@@ -164,12 +182,49 @@ if __name__ == "__main__":
 	for method in back_method:
 
 		if method=='none':
+			tic=time.time()
 			print 'Using the original image to create the segmentation map'
 			shared_im[:] = im_data
 		else:
-			print 'Modeling the background, removing it and then creating the segmentation map'
 			tic=time.time()
-			sky_data=Background(shared_im, back_size, filter_shape=back_filtersize, method=method, mask=im_mask_nan).background
+			print 'Modeling the background, removing it and then creating the segmentation map'
+			shared_im[:] = im_data
+
+			work_queue = multiprocessing.Queue()
+			grid_n=np.asarray(grid_n)
+			grid_mesh=np.ceil(im_size*1./grid_n).astype(int)
+			grid_x=np.append( np.arange(0,im_size[0], grid_mesh[0]), im_size[0])
+			grid_y=np.append( np.arange(0,im_size[1], grid_mesh[1]), im_size[1])
+		
+			for i in range(0,grid_x.size-1):
+				for j in range(0,grid_y.size-1):
+					if work_queue.full():
+						print "Oh no! Queue is full after only %d iterations" % j
+		
+					x_range=[grid_x[i],grid_x[i+1]]
+					y_range=[grid_y[j],grid_y[j+1]]
+					work_queue.put( (x_range, y_range, back_size) )
+		
+			# create a queue to pass to workers to store the results
+			result_queue = multiprocessing.Queue()
+			procs=[]
+		
+			# spawn workers
+			for i in range(n_processes):
+				worker = Worker_sky(work_queue, result_queue)
+				procs.append(worker)
+				worker.start()
+		
+			# collect the results off the queue
+			for i in range(n_processes):
+				result_queue.get()
+		
+			for p in procs:
+				p.join()
+		
+			print "Removal of large galaxies took %f seconds." % (time.time() - tic)
+
+#			sky_data=Background(shared_im, back_size, filter_shape=back_filtersize, method=method, mask=im_mask_nan).background
 			skysub_data=shared_im-sky_data
 			skysub_data[im_mask_nan]=0.
 			print "Sky modeling took %f seconds." % (time.time() - tic)
@@ -255,9 +310,9 @@ if __name__ == "__main__":
 			seg_npix = np.bincount(np.ravel(seg_data))[1:]
 			seg_max = np.nanmax(seg_npix)
 
-			seg_radius=np.sqrt(seg_max/np.pi)
-			print "Equivalent radius of largest source ", seg_radius
-			sys.exit()
+			seg_radius= np.sqrt(seg_max/np.pi)
+			back_size = np.full( 2, np.round(seg_radius/10.)*10 )
+			print "Back_size that will be used to remove large galaxies ", back_size
 
 			if method=='none':			
 				print "Writing file ", im_convol_file
