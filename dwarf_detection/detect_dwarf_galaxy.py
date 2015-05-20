@@ -252,7 +252,12 @@ if __name__ == "__main__":
 			print "Image median, stddev, threshold ", im_median, im_stddev, im_thresh
 		
 			seg_data = detect_sources(shared_nim, im_thresh, npixels=5)
-		
+			seg_npix = np.bincount(np.ravel(seg_data))[1:]
+			seg_max = np.nanmax(seg_npix)
+
+			seg_radius=np.sqrt(seg_max/np.pi)
+			print "Equivalent radius of largest source ", seg_radius
+			sys.exit()
 
 			if method=='none':			
 				print "Writing file ", im_convol_file
