@@ -12,10 +12,12 @@ import pyfits
 import multiprocessing, Queue
 import ctypes
 import matplotlib.pyplot as plt
+import scipy.interpolate
 from astropy.convolution import convolve, convolve_fft, Gaussian2DKernel
 from astropy.stats import sigma_clipped_stats
 from photutils import detect_sources, segment_properties, properties_table
 from photutils.background import Background
+from scipy.interpolate import Rbf
 
 from astroML.plotting import setup_text_plots
 setup_text_plots(fontsize=8, usetex=True)
@@ -41,7 +43,7 @@ class Worker_sky(multiprocessing.Process):
 
 			# get a task
 			try:
-				x_range, y_range, back_size = self.work_queue.get_nowait()
+				y_range, x_range, back_size = self.work_queue.get_nowait()
 			except Queue.Empty:
 				break
 
@@ -52,10 +54,10 @@ class Worker_sky(multiprocessing.Process):
 			im_size=np.asarray(shared_im.shape)
 
 			im_pad=back_size
-			x_pad=[0 if x_range[0]==0 else -im_pad[0], 0 if x_range[1]==(im_size[0]-1) else im_pad[0]]
-			y_pad=[0 if y_range[0]==0 else -im_pad[1], 0 if y_range[1]==(im_size[1]-1) else im_pad[1]]
+			y_pad=[0 if y_range[0]==0 else -im_pad[0], 0 if y_range[1]==(im_size[0]-1) else im_pad[0]]
+			x_pad=[0 if x_range[0]==0 else -im_pad[1], 0 if x_range[1]==(im_size[1]-1) else im_pad[1]]
 
-			im_data=shared_im[x_range[0]+x_pad[0]:x_range[1]+x_pad[1], y_range[0]+y_pad[0]:y_range[1]+y_pad[1]]
+			im_data=shared_im[y_range[0]+y_pad[0]:y_range[1]+y_pad[1], x_range[0]+x_pad[0]:x_range[1]+x_pad[1]]
 			yextra = im_data.shape[0] % back_size[0]
 			xextra = im_data.shape[1] % back_size[1]
 			
@@ -71,10 +73,28 @@ class Worker_sky(multiprocessing.Process):
 			x_nbins = int(nx / nx_box)   # always integer because data were padded
 			im_data_rebin = np.swapaxes(im_data_pad.reshape(y_nbins, ny_box, x_nbins, nx_box), 1, 2).reshape(y_nbins, x_nbins, ny_box * nx_box)
 
+			grid_data=np.median( im_data_rebin, axis=2)
+			grid_x, grid_y = np.meshgrid( np.arange(back_size[0]/2, nx, back_size[0]), np.arange(back_size[1]/2, ny, back_size[1]) )
+			grid_gv = np.isfinite(grid_data)
 
-			ny, nx = im_data.shape
+			im_x, im_y = np.meshgrid( np.arange(0,nx), np.arange(0,ny) )
 
-			shared_nim[x_range[0]:x_range[1], y_range[0]:y_range[1]]=convolve(shared_im[x_range[0]+x_pad[0]:x_range[1]+x_pad[1], y_range[0]+y_pad[0]:y_range[1]+y_pad[1]], shared_kernel, normalize_kernel=True)[-x_pad[0]:x_range[1]-x_range[0]-x_pad[0], -y_pad[0]:y_range[1]-y_range[0]-y_pad[0]]
+			print "y_nbins, x_nsbins = ", y_nbins, x_nbins
+			print "Shape of grid_x ", grid_x.shape
+			print "Shape of im_x ", im_x.shape
+			print np.sum(grid_gv)
+
+#			im_data_inter= scipy.interpolate.griddata((grid_y[grid_gv].flatten(),grid_x[grid_gv].flatten()), grid_data[grid_gv].flatten() , (im_y, im_x),method='cubic')
+			if np.sum(grid_gv)>2:
+				im_rbf= Rbf( grid_y[grid_gv], grid_x[grid_gv], grid_data[grid_gv], function='thin_plate', smooth=0.0)
+				im_data_inter= im_rbf(im_y, im_x)
+				shared_nim[y_range[0]:y_range[1], x_range[0]:x_range[1]] = im_data_inter[-y_pad[0]:y_range[1]-y_range[0]-y_pad[0], -x_pad[0]:x_range[1]-x_range[0]-x_pad[0]]
+
+#			print "Shape of original image ", im_data.shape
+#			print "Shape of padded image ", im_data_pad.shape
+#			print "Shape of interpolated image ", im_data_inter.shape
+#			print "Range of shared_nim y_range=", y_range[0], y_range[1], " x_range=", x_range[0], x_range[1]
+#			print "Range of im_data_inter y_range=", -y_pad[0], y_range[1]-y_range[0]-y_pad[0], " x_range=", -y_pad[0], y_range[1]-y_range[0]-y_pad[0]
 
 			print 'Worker done: ', multiprocessing.current_process()
 			self.result_queue.put(id)
@@ -144,13 +164,13 @@ if __name__ == "__main__":
 	kernel_large_size= np.full(2, round(4*kernel_large_sigma/2.)*2+1, dtype=np.int)
 
 	mask_area_min=1e5
-	back_method=['none','median']
-	back_size=(512,512)
+	back_method=['median','none','median']
+	back_size=(256,256)
 	back_filtersize=(1,1)
 
-	grid_n=[6,6]
+	grid_n=[12,12]
 	n_cpu=2
-	n_core=4
+	n_core=2
 
 	n_processes=n_cpu*n_core*1
 	
@@ -178,6 +198,7 @@ if __name__ == "__main__":
 	shared_nim_base = multiprocessing.Array(ctypes.c_float, im_size[0]*im_size[1])
 	shared_nim = np.ctypeslib.as_array(shared_nim_base.get_obj())
 	shared_nim = shared_nim.reshape(im_size[0], im_size[1])
+	shared_nim[:] = 0.
 
 	for method in back_method:
 
@@ -225,17 +246,19 @@ if __name__ == "__main__":
 			print "Removal of large galaxies took %f seconds." % (time.time() - tic)
 
 #			sky_data=Background(shared_im, back_size, filter_shape=back_filtersize, method=method, mask=im_mask_nan).background
-			skysub_data=shared_im-sky_data
+			shared_im[im_mask_nan]=0.
+			skysub_data=shared_im-shared_nim
 			skysub_data[im_mask_nan]=0.
 			print "Sky modeling took %f seconds." % (time.time() - tic)
 
 			print 'Writing sky file'
 			if os.path.isfile(im_sky_file): os.remove(im_sky_file)
-			pyfits.writeto(im_sky_file, sky_data, header=im_h)
+			pyfits.writeto(im_sky_file, shared_nim, header=im_h)
 
 			print 'Writing sky subtracted file'
 			if os.path.isfile(im_skysub_file): os.remove(im_skysub_file)
 			pyfits.writeto(im_skysub_file, skysub_data, header=im_h)
+			sys.exit()
 
 			shared_im[:] = skysub_data
 
