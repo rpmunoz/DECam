@@ -1,3 +1,7 @@
+; Licensed under a 3-clause BSD style license - see LICENSE.rst
+; DECam pipeline is being developed by Roberto Pablo Munoz, PhD
+; Munoz et al. 2015, ApJ, 813, L15
+
 forward_function decam_data
 
 pro decam_pipeline, recipe, PROGRAM=program, FILTER=filter, OVERWRITE=overwrite, TILE=tile, TYPE=type, DEBUG=debug, STANDARD=standard, AHEAD=ahead, SKY_METHOD=sky_method, SKY_NIM=sky_nim, SKY_NCHIP=sky_nchip, SKY_USE_TARGET=sky_use_target, ALIGN_FILTER=align_filter, NDITHER=ndither
