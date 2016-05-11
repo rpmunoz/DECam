@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8"?
+<VOTABLE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xmlns="http://www.ivoa.net/xml/VOTable/v1.1" xsi:schemaLocation="http://www.ivoa.net/xml/VOTable/v1.1 http://www.ivoa.net/xml/VOTable/v1.1">
+<DESCRIPTION>Created by Roberto Pablo Munoz, Pontificia Universidad Catolica de Chile</DESCRIPTION>
+
+<RESOURCE ID="Blanco_DECam" utype="dal:footprint.geom">
+    <PARAM datatype="char" arraysize="*" ID="TelescopeName" value="Blanco" />
+    <PARAM datatype="char" arraysize="*" ID="InstrumentName" value="DECam" />
+    <PARAM datatype="char" arraysize="*" ID="InstrumentDescription" value="Dark Energy Camera FOV" />
+    <PARAM datatype="char" arraysize="*" ID="Origin" value="Roberto Pablo Munoz" />
+
+    <PARAM datatype="char" arraysize="*" utype="stc:AstroCoordSystem.CoordFrame.CARTESIAN" name="reference frame" value="*"/>
+    <PARAM name="projection" utype="stc:AstroCoordSystem.CoordFrame.Cart2DRefFrame.projection" datatype="char" arraysize="*" value="TAN"/>
+
+
+    <RESOURCE ID="shape_1" name="chip_1">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1652.0</TD><TD>-3521.1</TD></TR>
+        <TR><TD>585.1</TD><TD>-3521.1</TD></TR>
+        <TR><TD>585.1</TD><TD>-2994.2</TD></TR>
+        <TR><TD>1652.0</TD><TD>-2994.2</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_2" name="chip_3">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-583.4</TD><TD>-3521.6</TD></TR>
+        <TR><TD>-1651.3</TD><TD>-3521.6</TD></TR>
+        <TR><TD>-1651.3</TD><TD>-2991.8</TD></TR>
+        <TR><TD>-583.4</TD><TD>-2991.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_3" name="chip_4">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2210.3</TD><TD>-2928.9</TD></TR>
+        <TR><TD>1143.5</TD><TD>-2928.9</TD></TR>
+        <TR><TD>1143.5</TD><TD>-2401.9</TD></TR>
+        <TR><TD>2210.3</TD><TD>-2401.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_4" name="chip_5">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1094.0</TD><TD>-2930.2</TD></TR>
+        <TR><TD>24.8</TD><TD>-2930.2</TD></TR>
+        <TR><TD>24.8</TD><TD>-2402.8</TD></TR>
+        <TR><TD>1094.0</TD><TD>-2402.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_5" name="chip_6">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-24.7</TD><TD>-2931.5</TD></TR>
+        <TR><TD>-1094.3</TD><TD>-2931.5</TD></TR>
+        <TR><TD>-1094.3</TD><TD>-2402.4</TD></TR>
+        <TR><TD>-24.7</TD><TD>-2402.4</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_6" name="chip_7">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1142.8</TD><TD>-2930.6</TD></TR>
+        <TR><TD>-2210.7</TD><TD>-2930.6</TD></TR>
+        <TR><TD>-2210.7</TD><TD>-2400.3</TD></TR>
+        <TR><TD>-1142.8</TD><TD>-2400.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_7" name="chip_8">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2769.3</TD><TD>-2336.9</TD></TR>
+        <TR><TD>1703.7</TD><TD>-2336.9</TD></TR>
+        <TR><TD>1703.7</TD><TD>-1810.1</TD></TR>
+        <TR><TD>2769.3</TD><TD>-1810.1</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_8" name="chip_9">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1652.8</TD><TD>-2340.5</TD></TR>
+        <TR><TD>584.9</TD><TD>-2340.5</TD></TR>
+        <TR><TD>584.9</TD><TD>-1811.7</TD></TR>
+        <TR><TD>1652.8</TD><TD>-1811.7</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_9" name="chip_10">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>535.5</TD><TD>-2340.4</TD></TR>
+        <TR><TD>-534.4</TD><TD>-2340.4</TD></TR>
+        <TR><TD>-534.4</TD><TD>-1811.2</TD></TR>
+        <TR><TD>535.5</TD><TD>-1811.2</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_10" name="chip_11">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-584.1</TD><TD>-2340.4</TD></TR>
+        <TR><TD>-1653.7</TD><TD>-2340.4</TD></TR>
+        <TR><TD>-1653.7</TD><TD>-1810.0</TD></TR>
+        <TR><TD>-584.1</TD><TD>-1810.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_11" name="chip_12">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1702.7</TD><TD>-2339.3</TD></TR>
+        <TR><TD>-2769.5</TD><TD>-2339.3</TD></TR>
+        <TR><TD>-2769.5</TD><TD>-1808.5</TD></TR>
+        <TR><TD>-1702.7</TD><TD>-1808.5</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_12" name="chip_13">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>3328.0</TD><TD>-1745.7</TD></TR>
+        <TR><TD>2262.6</TD><TD>-1745.7</TD></TR>
+        <TR><TD>2262.6</TD><TD>-1217.6</TD></TR>
+        <TR><TD>3328.0</TD><TD>-1217.6</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_13" name="chip_14">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2213.0</TD><TD>-1747.8</TD></TR>
+        <TR><TD>1145.4</TD><TD>-1747.8</TD></TR>
+        <TR><TD>1145.4</TD><TD>-1218.5</TD></TR>
+        <TR><TD>2213.0</TD><TD>-1218.5</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_14" name="chip_15">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1094.1</TD><TD>-1749.4</TD></TR>
+        <TR><TD>24.1</TD><TD>-1749.4</TD></TR>
+        <TR><TD>24.1</TD><TD>-1219.5</TD></TR>
+        <TR><TD>1094.1</TD><TD>-1219.5</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_15" name="chip_16">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-25.2</TD><TD>-1750.1</TD></TR>
+        <TR><TD>-1095.4</TD><TD>-1750.1</TD></TR>
+        <TR><TD>-1095.4</TD><TD>-1219.0</TD></TR>
+        <TR><TD>-25.2</TD><TD>-1219.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_16" name="chip_17">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1145.3</TD><TD>-1748.9</TD></TR>
+        <TR><TD>-2214.7</TD><TD>-1748.9</TD></TR>
+        <TR><TD>-2214.7</TD><TD>-1218.2</TD></TR>
+        <TR><TD>-1145.3</TD><TD>-1218.2</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_17" name="chip_18">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-2262.3</TD><TD>-1746.9</TD></TR>
+        <TR><TD>-3322.1</TD><TD>-1746.9</TD></TR>
+        <TR><TD>-3322.1</TD><TD>-1217.0</TD></TR>
+        <TR><TD>-2262.3</TD><TD>-1217.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_18" name="chip_19">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>3328.7</TD><TD>-1155.1</TD></TR>
+        <TR><TD>2263.2</TD><TD>-1155.1</TD></TR>
+        <TR><TD>2263.2</TD><TD>-626.1</TD></TR>
+        <TR><TD>3328.7</TD><TD>-626.1</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_19" name="chip_20">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2214.1</TD><TD>-1156.3</TD></TR>
+        <TR><TD>1146.0</TD><TD>-1156.3</TD></TR>
+        <TR><TD>1146.0</TD><TD>-626.3</TD></TR>
+        <TR><TD>2214.1</TD><TD>-626.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_20" name="chip_21">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1096.0</TD><TD>-1157.4</TD></TR>
+        <TR><TD>25.2</TD><TD>-1157.4</TD></TR>
+        <TR><TD>25.2</TD><TD>-626.6</TD></TR>
+        <TR><TD>1096.0</TD><TD>-626.6</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_21" name="chip_22">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-24.4</TD><TD>-1157.1</TD></TR>
+        <TR><TD>-1095.7</TD><TD>-1157.1</TD></TR>
+        <TR><TD>-1095.7</TD><TD>-626.3</TD></TR>
+        <TR><TD>-24.4</TD><TD>-626.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_22" name="chip_23">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1144.7</TD><TD>-1157.1</TD></TR>
+        <TR><TD>-2214.4</TD><TD>-1157.1</TD></TR>
+        <TR><TD>-2214.4</TD><TD>-626.0</TD></TR>
+        <TR><TD>-1144.7</TD><TD>-626.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_23" name="chip_24">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-2262.4</TD><TD>-1156.4</TD></TR>
+        <TR><TD>-3329.6</TD><TD>-1156.4</TD></TR>
+        <TR><TD>-3329.6</TD><TD>-626.1</TD></TR>
+        <TR><TD>-2262.4</TD><TD>-626.1</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_24" name="chip_25">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>3887.1</TD><TD>-562.9</TD></TR>
+        <TR><TD>2821.5</TD><TD>-562.9</TD></TR>
+        <TR><TD>2821.5</TD><TD>-32.9</TD></TR>
+        <TR><TD>3887.1</TD><TD>-32.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_25" name="chip_26">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2771.6</TD><TD>-563.4</TD></TR>
+        <TR><TD>1705.1</TD><TD>-563.4</TD></TR>
+        <TR><TD>1705.1</TD><TD>-33.3</TD></TR>
+        <TR><TD>2771.6</TD><TD>-33.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_26" name="chip_27">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1654.9</TD><TD>-564.1</TD></TR>
+        <TR><TD>584.6</TD><TD>-564.1</TD></TR>
+        <TR><TD>584.6</TD><TD>-33.7</TD></TR>
+        <TR><TD>1654.9</TD><TD>-33.7</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_27" name="chip_28">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>535.7</TD><TD>-564.7</TD></TR>
+        <TR><TD>-535.2</TD><TD>-564.7</TD></TR>
+        <TR><TD>-535.2</TD><TD>-33.3</TD></TR>
+        <TR><TD>535.7</TD><TD>-33.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_28" name="chip_29">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-584.9</TD><TD>-564.4</TD></TR>
+        <TR><TD>-1655.5</TD><TD>-564.4</TD></TR>
+        <TR><TD>-1655.5</TD><TD>-33.8</TD></TR>
+        <TR><TD>-584.9</TD><TD>-33.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_29" name="chip_30">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1704.8</TD><TD>-564.2</TD></TR>
+        <TR><TD>-2772.1</TD><TD>-564.2</TD></TR>
+        <TR><TD>-2772.1</TD><TD>-32.9</TD></TR>
+        <TR><TD>-1704.8</TD><TD>-32.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_30" name="chip_31">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-2821.7</TD><TD>-564.0</TD></TR>
+        <TR><TD>-3887.0</TD><TD>-564.0</TD></TR>
+        <TR><TD>-3887.0</TD><TD>-33.4</TD></TR>
+        <TR><TD>-2821.7</TD><TD>-33.4</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_31" name="chip_32">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>3887.7</TD><TD>29.4</TD></TR>
+        <TR><TD>2822.0</TD><TD>29.4</TD></TR>
+        <TR><TD>2822.0</TD><TD>558.8</TD></TR>
+        <TR><TD>3887.7</TD><TD>558.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_32" name="chip_33">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2772.5</TD><TD>28.7</TD></TR>
+        <TR><TD>1705.5</TD><TD>28.7</TD></TR>
+        <TR><TD>1705.5</TD><TD>560.3</TD></TR>
+        <TR><TD>2772.5</TD><TD>560.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_33" name="chip_34">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1656.7</TD><TD>29.0</TD></TR>
+        <TR><TD>585.4</TD><TD>29.0</TD></TR>
+        <TR><TD>585.4</TD><TD>558.9</TD></TR>
+        <TR><TD>1656.7</TD><TD>558.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_34" name="chip_35">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>536.8</TD><TD>29.3</TD></TR>
+        <TR><TD>-534.7</TD><TD>29.3</TD></TR>
+        <TR><TD>-534.7</TD><TD>559.9</TD></TR>
+        <TR><TD>536.8</TD><TD>559.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_35" name="chip_36">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-584.6</TD><TD>27.7</TD></TR>
+        <TR><TD>-1655.1</TD><TD>27.7</TD></TR>
+        <TR><TD>-1655.1</TD><TD>559.7</TD></TR>
+        <TR><TD>-584.6</TD><TD>559.7</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_36" name="chip_37">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1704.4</TD><TD>28.5</TD></TR>
+        <TR><TD>-2772.1</TD><TD>28.5</TD></TR>
+        <TR><TD>-2772.1</TD><TD>558.5</TD></TR>
+        <TR><TD>-1704.4</TD><TD>558.5</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_37" name="chip_38">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-2821.2</TD><TD>28.5</TD></TR>
+        <TR><TD>-3886.2</TD><TD>28.5</TD></TR>
+        <TR><TD>-3886.2</TD><TD>557.9</TD></TR>
+        <TR><TD>-2821.2</TD><TD>557.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_38" name="chip_39">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>3329.7</TD><TD>620.6</TD></TR>
+        <TR><TD>2263.5</TD><TD>620.6</TD></TR>
+        <TR><TD>2263.5</TD><TD>1151.8</TD></TR>
+        <TR><TD>3329.7</TD><TD>1151.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_39" name="chip_40">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2214.7</TD><TD>621.2</TD></TR>
+        <TR><TD>1145.7</TD><TD>621.2</TD></TR>
+        <TR><TD>1145.7</TD><TD>1152.8</TD></TR>
+        <TR><TD>2214.7</TD><TD>1152.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_40" name="chip_41">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1095.9</TD><TD>622.0</TD></TR>
+        <TR><TD>25.1</TD><TD>622.0</TD></TR>
+        <TR><TD>25.1</TD><TD>1153.8</TD></TR>
+        <TR><TD>1095.9</TD><TD>1153.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_41" name="chip_42">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-24.4</TD><TD>622.7</TD></TR>
+        <TR><TD>-1095.7</TD><TD>622.7</TD></TR>
+        <TR><TD>-1095.7</TD><TD>1153.2</TD></TR>
+        <TR><TD>-24.4</TD><TD>1153.2</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_42" name="chip_43">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1145.2</TD><TD>621.5</TD></TR>
+        <TR><TD>-2212.9</TD><TD>621.5</TD></TR>
+        <TR><TD>-2212.9</TD><TD>1151.1</TD></TR>
+        <TR><TD>-1145.2</TD><TD>1151.1</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_43" name="chip_44">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-2262.0</TD><TD>621.2</TD></TR>
+        <TR><TD>-3328.0</TD><TD>621.2</TD></TR>
+        <TR><TD>-3328.0</TD><TD>1150.2</TD></TR>
+        <TR><TD>-2262.0</TD><TD>1150.2</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_44" name="chip_45">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>3330.1</TD><TD>1212.0</TD></TR>
+        <TR><TD>2263.0</TD><TD>1212.0</TD></TR>
+        <TR><TD>2263.0</TD><TD>1743.0</TD></TR>
+        <TR><TD>3330.1</TD><TD>1743.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_45" name="chip_46">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2213.6</TD><TD>1213.3</TD></TR>
+        <TR><TD>1144.6</TD><TD>1213.3</TD></TR>
+        <TR><TD>1144.6</TD><TD>1745.0</TD></TR>
+        <TR><TD>2213.6</TD><TD>1745.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_46" name="chip_47">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1096.0</TD><TD>1214.0</TD></TR>
+        <TR><TD>25.0</TD><TD>1214.0</TD></TR>
+        <TR><TD>25.0</TD><TD>1745.1</TD></TR>
+        <TR><TD>1096.0</TD><TD>1745.1</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_47" name="chip_48">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-24.7</TD><TD>1214.7</TD></TR>
+        <TR><TD>-1094.6</TD><TD>1214.7</TD></TR>
+        <TR><TD>-1094.6</TD><TD>1745.3</TD></TR>
+        <TR><TD>-24.7</TD><TD>1745.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_48" name="chip_49">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1144.9</TD><TD>1214.1</TD></TR>
+        <TR><TD>-2212.4</TD><TD>1214.1</TD></TR>
+        <TR><TD>-2212.4</TD><TD>1743.9</TD></TR>
+        <TR><TD>-1144.9</TD><TD>1743.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_49" name="chip_50">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-2261.8</TD><TD>1212.0</TD></TR>
+        <TR><TD>-3328.0</TD><TD>1212.0</TD></TR>
+        <TR><TD>-3328.0</TD><TD>1741.0</TD></TR>
+        <TR><TD>-2261.8</TD><TD>1741.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_50" name="chip_51">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2770.8</TD><TD>1803.6</TD></TR>
+        <TR><TD>1702.9</TD><TD>1803.6</TD></TR>
+        <TR><TD>1702.9</TD><TD>2335.2</TD></TR>
+        <TR><TD>2770.8</TD><TD>2335.2</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_51" name="chip_52">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1654.1</TD><TD>1805.7</TD></TR>
+        <TR><TD>584.3</TD><TD>1805.7</TD></TR>
+        <TR><TD>584.3</TD><TD>2336.9</TD></TR>
+        <TR><TD>1654.1</TD><TD>2336.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_52" name="chip_53">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>535.7</TD><TD>1806.7</TD></TR>
+        <TR><TD>-534.8</TD><TD>1806.7</TD></TR>
+        <TR><TD>-534.8</TD><TD>2336.5</TD></TR>
+        <TR><TD>535.7</TD><TD>2336.5</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_53" name="chip_54">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-584.3</TD><TD>1806.6</TD></TR>
+        <TR><TD>-1652.7</TD><TD>1806.6</TD></TR>
+        <TR><TD>-1652.7</TD><TD>2335.9</TD></TR>
+        <TR><TD>-584.3</TD><TD>2335.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_54" name="chip_55">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1701.9</TD><TD>1805.1</TD></TR>
+        <TR><TD>-2769.6</TD><TD>1805.1</TD></TR>
+        <TR><TD>-2769.6</TD><TD>2333.2</TD></TR>
+        <TR><TD>-1701.9</TD><TD>2333.2</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_55" name="chip_56">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>2211.8</TD><TD>2396.0</TD></TR>
+        <TR><TD>1143.0</TD><TD>2396.0</TD></TR>
+        <TR><TD>1143.0</TD><TD>2926.8</TD></TR>
+        <TR><TD>2211.8</TD><TD>2926.8</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_56" name="chip_57">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1094.8</TD><TD>2397.8</TD></TR>
+        <TR><TD>25.1</TD><TD>2397.8</TD></TR>
+        <TR><TD>25.1</TD><TD>2927.9</TD></TR>
+        <TR><TD>1094.8</TD><TD>2927.9</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_57" name="chip_58">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-23.9</TD><TD>2398.5</TD></TR>
+        <TR><TD>-1093.4</TD><TD>2398.5</TD></TR>
+        <TR><TD>-1093.4</TD><TD>2927.1</TD></TR>
+        <TR><TD>-23.9</TD><TD>2927.1</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_58" name="chip_59">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-1142.9</TD><TD>2397.3</TD></TR>
+        <TR><TD>-2210.4</TD><TD>2397.3</TD></TR>
+        <TR><TD>-2210.4</TD><TD>2925.0</TD></TR>
+        <TR><TD>-1142.9</TD><TD>2925.0</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_59" name="chip_60">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>1652.8</TD><TD>2987.6</TD></TR>
+        <TR><TD>583.8</TD><TD>2987.6</TD></TR>
+        <TR><TD>583.8</TD><TD>3517.3</TD></TR>
+        <TR><TD>1652.8</TD><TD>3517.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+
+    <RESOURCE ID="shape_60" name="chip_62">
+    <TABLE utype="dal:footprint.geom.segment">
+    <PARAM datatype="char" name="Shape" arraysize="*" value="Polygon" utype="dal:footprint.geom.segment.shape" />
+    <FIELD unit="arcsec" datatype="double" name="xPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C1" />
+    <FIELD unit="arcsec" datatype="double" name="yPtPosition" utype="stc:AstroCoordArea.Polygon.Vertex.Position.C2" />
+    <DATA>
+    <TABLEDATA>
+        <TR><TD>-583.1</TD><TD>2989.0</TD></TR>
+        <TR><TD>-1651.7</TD><TD>2989.0</TD></TR>
+        <TR><TD>-1651.7</TD><TD>3516.3</TD></TR>
+        <TR><TD>-583.1</TD><TD>3516.3</TD></TR>
+    </TABLEDATA>
+    </DATA>
+    </TABLE>
+    </RESOURCE>
+</RESOURCE>
+</VOTABLE>

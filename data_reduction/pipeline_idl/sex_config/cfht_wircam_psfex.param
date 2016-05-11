@@ -1,0 +1,14 @@
+NUMBER                   Running object number                                    
+ALPHA_J2000              Right ascension of barycenter (J2000)                     [deg]
+DELTA_J2000              Declination of barycenter (J2000)                         [deg]
+VIGNET(65,65)
+X_IMAGE
+Y_IMAGE
+FLUX_APER(1)
+FLUXERR_APER(1)
+FLUX_RADIUS
+ELONGATION
+FLUX_MAX
+FLAGS
+SNR_WIN
+IMAFLAGS_ISO

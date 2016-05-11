@@ -1,0 +1,20 @@
+NUMBER                   Running object number
+ALPHA_J2000              Right ascension of barycenter (J2000)                     [deg]
+DELTA_J2000              Declination of barycenter (J2000)                         [deg]
+MAG_APER(7)
+MAGERR_APER(7)
+MAG_AUTO                 Kron-like elliptical aperture magnitude                   [mag]
+MAGERR_AUTO              RMS error for AUTO magnitude                              [mag]
+MAG_PSF
+MAGERR_PSF
+FLUX_RADIUS
+CLASS_STAR               S/G classifier output
+X_IMAGE                  Object position along x                                   [pixel]
+Y_IMAGE                  Object position along y                                   [pixel]
+FWHM_IMAGE               FWHM assuming a gaussian core                             [pixel]
+KRON_RADIUS
+A_IMAGE                  Profile RMS along major axis                              [pixel]
+B_IMAGE                  Profile RMS along minor axis                              [pixel]
+THETA_IMAGE              Position angle (CCW/x)                                    [deg]
+FLAGS                    Extraction flags
+FLAGS_WEIGHT             Weighted extraction flags
